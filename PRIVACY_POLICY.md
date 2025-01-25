@@ -2,7 +2,7 @@ Privacy and policy cultural app
 
 ## Privacy Policy
 
-**Effective Date:** [Insert Date]
+**Effective Date:** [1/25/2025]
 
 Your privacy is important to us. This document explains how we collect, use, and protect your personal information while using the **Cultural-Based Encryption App**.
 
