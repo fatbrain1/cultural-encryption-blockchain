@@ -1,0 +1,52 @@
+contract CommunityGovernance {
+    struct Proposal {
+        uint256 id;
+        string description;
+        uint256 votesFor;
+        uint256 votesAgainst;
+        uint256 deadline;
+        bool executed;
+    }
+
+    uint256 public proposalCount;
+    mapping(uint256 => Proposal) public proposals;
+    mapping(address => bool) public voted;
+
+    event ProposalCreated(uint256 id, string description);
+    event Voted(uint256 id, bool vote, address voter);
+
+    function createProposal(string memory description, uint256 duration) public {
+        proposalCount++;
+        proposals[proposalCount] = Proposal(
+            proposalCount,
+            description,
+            0,
+            0,
+            block.timestamp + duration,
+            false
+        );
+        emit ProposalCreated(proposalCount, description);
+    }
+
+    function vote(uint256 proposalId, bool voteFor) public {
+        require(block.timestamp < proposals[proposalId].deadline, "Voting period has ended");
+        require(!voted[msg.sender], "You have already voted");
+        voted[msg.sender] = true;
+        
+        if (voteFor) {
+            proposals[proposalId].votesFor++;
+        } else {
+            proposals[proposalId].votesAgainst++;
+        }
+        
+        emit Voted(proposalId, voteFor, msg.sender);
+    }
+
+    function executeProposal(uint256 proposalId) public {
+        require(block.timestamp > proposals[proposalId].deadline, "Voting period has not ended");
+        require(!proposals[proposalId].executed, "Proposal already executed");
+        
+        proposals[proposalId].executed = true;
+        // Execute the proposal logic here
+    }
+}

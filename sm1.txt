@@ -1,0 +1,29 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
+contract ThinkingCoin is ERC20 {
+    address public owner;
+    uint256 public totalSupply = 1_000_000_000 * 10 ** 18; // 1 Billion THC tokens
+
+    constructor() ERC20("ThinkingCoin", "THC") {
+        owner = msg.sender;
+        _mint(msg.sender, totalSupply * 60 / 100); // 60% for developers and contributors
+        _mint(address(this), totalSupply * 30 / 100); // 30% for community and verifiers
+        _mint(owner, totalSupply * 5 / 100); // 5% for owner and inventors
+        _mint(address(this), totalSupply * 5 / 100); // 5% for reserve
+    }
+
+    function distributeCommunityTokens(address to, uint256 amount) public {
+        require(msg.sender == owner, "Only owner can distribute tokens");
+        _transfer(address(this), to, amount);
+    }
+
+    function distributeReserveTokens(address to, uint256 amount) public {
+        require(msg.sender == owner, "Only owner can distribute tokens");
+        _transfer(address(this), to, amount);
+    }
+
+    // Additional functions for voting, updating, and incentives will be added here.
+}
